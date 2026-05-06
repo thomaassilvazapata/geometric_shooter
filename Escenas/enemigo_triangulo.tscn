@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnpfj0vq5qfhx"]
+
+[ext_resource type="Script" uid="uid://806snqgjbq48" path="res://Scripts/enemigo_triangulo.gd" id="1_xkhsr"]
+[ext_resource type="Texture2D" uid="uid://dixpt6x1t14mf" path="res://Imagenes/light.png" id="2_fff8e"]
+
+[node name="enemigo_triangulo" type="CharacterBody2D"]
+script = ExtResource("1_xkhsr")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0, 0, 1)
+shadow_enabled = true
+texture = ExtResource("2_fff8e")
+texture_scale = 0.5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(-0.953452, 0.857873)
+polygon = PackedVector2Array(0, -9.32539, 10.4882, 10.4911, -10.4882, 10.4911)

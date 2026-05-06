@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://d24ahcmgrukiw"]
+
+[ext_resource type="Script" uid="uid://dm4cny3pi8c1b" path="res://Scripts/jugador.gd" id="1_83bx5"]
+[ext_resource type="Texture2D" uid="uid://dixpt6x1t14mf" path="res://Imagenes/light.png" id="2_pd7u1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ru7al"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_83bx5"]
+
+[node name="Jugador" type="CharacterBody2D" groups=["Jugador"]]
+script = ExtResource("1_83bx5")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0, 1, 1, 1)
+shadow_enabled = true
+texture = ExtResource("2_pd7u1")
+texture_scale = 0.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ru7al")
+disabled = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 1, 0.529412)
+scale = Vector2(20, 20)
+texture = SubResource("CanvasTexture_83bx5")

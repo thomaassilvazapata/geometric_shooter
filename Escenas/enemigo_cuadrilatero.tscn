@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4lsk6xc3cx8b"]
+
+[ext_resource type="Texture2D" uid="uid://dixpt6x1t14mf" path="res://Imagenes/light.png" id="1_5y4sx"]
+[ext_resource type="Script" uid="uid://b0ila86cf3ym1" path="res://Scripts/enemigo_cuadrilatero.gd" id="1_yf46y"]
+
+[node name="enemigo_cuadrilatero" type="CharacterBody2D"]
+script = ExtResource("1_yf46y")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+shadow_enabled = true
+texture = ExtResource("1_5y4sx")
+texture_scale = 0.5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+modulate = Color(1, 1, 0, 1)
+scale = Vector2(2, 1.333)
+polygon = PackedVector2Array(27.2693, 26.8105, 12.5858, -24.4791, -27.2693, -24.4791, -13.6347, 26.8105)
+disabled = true
