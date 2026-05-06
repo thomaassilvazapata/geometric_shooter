@@ -1,23 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://s47eco7ygwua"]
+[gd_scene format=3 uid="uid://s47eco7ygwua"]
 
 [ext_resource type="PackedScene" uid="uid://d24ahcmgrukiw" path="res://Escenas/jugador.tscn" id="1_65efl"]
 [ext_resource type="Script" uid="uid://hn18mywg3htx" path="res://Scripts/spawn_enemigo.gd" id="2_kbswl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_itk02"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=1187395745]
 
-[node name="Node" type="Node" parent="."]
+[node name="Node" type="Node" parent="." unique_id=310003646]
 
-[node name="Area2D" type="Area2D" parent="Node"]
+[node name="Area2D" type="Area2D" parent="Node" unique_id=1153918062]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node/Area2D" unique_id=1368074505]
 scale = Vector2(8, 8)
 shape = SubResource("CircleShape2D_itk02")
 debug_color = Color(1.15514e-06, 0.643478, 0.299268, 0.42)
 
-[node name="Jugador" parent="." instance=ExtResource("1_65efl")]
+[node name="Jugador" parent="." unique_id=1479262159 instance=ExtResource("1_65efl")]
 scale = Vector2(1.00154, 1)
 
-[node name="Spawn1" type="Node2D" parent="."]
+[node name="Spawn1" type="Node2D" parent="." unique_id=768450981]
 script = ExtResource("2_kbswl")
