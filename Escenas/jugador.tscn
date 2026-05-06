@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d24ahcmgrukiw"]
 
 [ext_resource type="Script" uid="uid://dm4cny3pi8c1b" path="res://Scripts/jugador.gd" id="1_83bx5"]
+[ext_resource type="PackedScene" uid="uid://bjkwatkeoisvu" path="res://Escenas/disparo.tscn" id="2_ewkf5"]
 [ext_resource type="Texture2D" uid="uid://dixpt6x1t14mf" path="res://Imagenes/light.png" id="2_pd7u1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru7al"]
@@ -9,6 +10,7 @@
 
 [node name="Jugador" type="CharacterBody2D" unique_id=1216408797 groups=["Jugador"]]
 script = ExtResource("1_83bx5")
+bullet_scene = ExtResource("2_ewkf5")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=172358313]
 color = Color(0, 1, 1, 1)
