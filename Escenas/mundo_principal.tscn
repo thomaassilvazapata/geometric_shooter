@@ -1,23 +1,44 @@
-[gd_scene format=3 uid="uid://s47eco7ygwua"]
+[gd_scene load_steps=6 format=3 uid="uid://s47eco7ygwua"]
 
 [ext_resource type="PackedScene" uid="uid://d24ahcmgrukiw" path="res://Escenas/jugador.tscn" id="1_65efl"]
+[ext_resource type="Script" uid="uid://b8wej323aa7q1" path="res://Escenas/coordernadas.gd" id="1_a1ae6"]
+[ext_resource type="Script" uid="uid://drdyb5ibi654p" path="res://Escenas/centro.gd" id="2_gx3jx"]
 [ext_resource type="Script" uid="uid://hn18mywg3htx" path="res://Scripts/spawn_enemigo.gd" id="2_kbswl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_itk02"]
 
-[node name="Node2D" type="Node2D" unique_id=1187395745]
+[node name="Mundo" type="Node2D"]
 
-[node name="Node" type="Node" parent="." unique_id=310003646]
+[node name="Centro" type="Node2D" parent="."]
+script = ExtResource("1_a1ae6")
+grid_color = Color(0.501961, 0.501961, 0.501961, 0.196078)
+axis_color_x = Color(1, 0, 0, 0.392157)
+axis_color_y = Color(0, 1, 0, 0.392157)
 
-[node name="AreaVulnerable" type="Area2D" parent="Node" unique_id=1153918062 groups=["Jugador"]]
+[node name="AreaVulnerable" type="Area2D" parent="Centro" groups=["Jugador", "centro"]]
+script = ExtResource("2_gx3jx")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node/AreaVulnerable" unique_id=1368074505]
+[node name="ProgressBar" type="ProgressBar" parent="Centro/AreaVulnerable"]
+modulate = Color(0, 1, 0, 1)
+z_index = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.0
+offset_top = -15.0
+offset_right = 78.0
+offset_bottom = 12.0
+grow_horizontal = 2
+value = 100.0
+rounded = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Centro/AreaVulnerable"]
 scale = Vector2(8, 8)
 shape = SubResource("CircleShape2D_itk02")
 debug_color = Color(1.15514e-06, 0.643478, 0.299268, 0.42)
 
-[node name="Jugador" parent="." unique_id=1479262159 instance=ExtResource("1_65efl")]
+[node name="Jugador" parent="." instance=ExtResource("1_65efl")]
 scale = Vector2(1.00154, 1)
 
-[node name="Spawn1" type="Node2D" parent="." unique_id=768450981]
+[node name="Spawn1" type="Node2D" parent="."]
 script = ExtResource("2_kbswl")

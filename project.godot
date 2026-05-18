@@ -16,12 +16,18 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="geometric_shooter"
 run/main_scene="uid://s47eco7ygwua"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Nucleo="*res://Scripts/nucleo.gd"
 
 [global_group]
 
-Jugador=""
+centro=""
+enemigo=""
+jugador=""
 
 [input]
 
