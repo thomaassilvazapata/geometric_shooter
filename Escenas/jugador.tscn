@@ -1,33 +1,43 @@
-[gd_scene format=3 uid="uid://d24ahcmgrukiw"]
+[gd_scene load_steps=5 format=3 uid="uid://d24ahcmgrukiw"]
 
 [ext_resource type="Script" uid="uid://dm4cny3pi8c1b" path="res://Scripts/jugador.gd" id="1_83bx5"]
-[ext_resource type="PackedScene" uid="uid://bjkwatkeoisvu" path="res://Escenas/disparo.tscn" id="2_ewkf5"]
 [ext_resource type="Texture2D" uid="uid://dixpt6x1t14mf" path="res://Imagenes/light.png" id="2_pd7u1"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ru7al"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_83bx5"]
 
-[node name="Jugador" type="CharacterBody2D" unique_id=1216408797 groups=["Jugador"]]
-script = ExtResource("1_83bx5")
-bullet_scene = ExtResource("2_ewkf5")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ru7al"]
+size = Vector2(30, 30)
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=172358313]
+[node name="Jugador" type="CharacterBody2D" groups=["Jugador"]]
+script = ExtResource("1_83bx5")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0, 1, 1, 1)
 shadow_enabled = true
 texture = ExtResource("2_pd7u1")
 texture_scale = 0.5
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=617440496]
-shape = SubResource("RectangleShape2D_ru7al")
-disabled = true
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 1, 0.529412)
+scale = Vector2(20, 20)
+texture = SubResource("CanvasTexture_83bx5")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=812946297]
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0, 1, 1, 1)
+polygon = PackedVector2Array(-15, -15, 15, -15, 15, 15, -15, 15)
+
+[node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 rotation_smoothing_enabled = true
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1422662233]
-modulate = Color(0, 1, 1, 0.529412)
-scale = Vector2(20, 20)
-texture = SubResource("CanvasTexture_83bx5")
+[node name="Area2D" type="Area2D" parent="." groups=["Jugador"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_ru7al")
+disabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Jugador"]]
+shape = SubResource("RectangleShape2D_ru7al")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_entered"]

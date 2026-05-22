@@ -12,38 +12,31 @@ var interval1: float = 5 #cada cuanto aparece un nuevo enemigo triangulo
 var timer2: float = 0.0
 var interval2: float = 20 # enemigo cuadrilatero
 
-#escoge un numero aleatorio entre los maximos escogidos
-func get_random_point_inside(p1: Vector2, p2: Vector2) -> Vector2:
-	var x_value: float = randf_range(p1.x, p2.x)
-	var y_value: float = randf_range(p1.y, p2.y)
-
-	var random_point_inside: Vector2 = Vector2(x_value, y_value)
-
-	return(random_point_inside)
+@export var radio_spawn: float = 500.0
 
 func spawn_enemigo(tipo: String):
-	var enemy_instance: Node
+	var enemigo: Node
 	
 	if tipo == "triangulo":
-		enemy_instance = triangle_node.instantiate()
+		enemigo = triangle_node.instantiate()
 	elif tipo == "cuadrilatero":
-		enemy_instance = rectangle_node.instantiate()
+		enemigo = rectangle_node.instantiate()
 	
-	add_child(enemy_instance) #añada el enemigo
+	# Posición aleatoria en círculo
+	var angulo = randf_range(0, 360)
+	var radianes = deg_to_rad(angulo)
+	var x = cos(radianes) * radio_spawn
+	var y = sin(radianes) * radio_spawn
 	
-	#declara los puntos extremos segun el nodo que tiene el script
-	if self.name == "Spawn1":
-		point_1 = Vector2(-200,-200)
-		point_2 = Vector2(200,-150)
-
-	var spawn_location: Vector2 = get_random_point_inside(point_1, point_2)
-	enemy_instance.set_position(spawn_location)
+	enemigo.global_position = Vector2(x, y)
+	add_child(enemigo)
+	print("Enemigo spawn en: ", enemigo.global_position)
 
 #se encarga de obtener resultados aleatorios cada vez
 func _ready():
 	randomize()
 
-#instancia una guadaña indefinidamente respecto a la relacion contador-intervalo
+#instancia un enemigo indefinidamente respecto a la relacion contador-intervalo
 func _process(delta):
 	timer1 += delta
 	if timer1 >= interval1:
