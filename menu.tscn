@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://3bl4k0y5471e"]
+
+[ext_resource type="Script" uid="uid://cmb05itqfmw28" path="res://menu.gd" id="1_ouk20"]
+[ext_resource type="Texture2D" uid="uid://c8bm8a4ftk5fg" path="res://Imagenes/Gemini_Generated_Image_n34f5ln34f5ln34f.png" id="2_mae5d"]
+
+[node name="menu" type="Control" unique_id=1570685687]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ouk20")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1900778698]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1611478432]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -257.5
+offset_right = 257.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_mae5d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1320452063]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.5
+offset_top = -130.5
+offset_right = 145.5
+offset_bottom = 130.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="jugar" type="Button" parent="VBoxContainer" unique_id=627760598]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Jugar"
+
+[node name="opciones" type="Button" parent="VBoxContainer" unique_id=2085885645]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Opciones"
+
+[node name="salir" type="Button" parent="VBoxContainer" unique_id=1491667489]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Salir"
+
+[connection signal="pressed" from="VBoxContainer/jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="VBoxContainer/opciones" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="VBoxContainer/salir" to="." method="_on_salir_pressed"]
