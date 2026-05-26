@@ -12,6 +12,11 @@ shadow_enabled = true
 texture = ExtResource("2_fff8e")
 texture_scale = 0.5
 
+[node name="Polygon2D" type="Polygon2D" parent="."]
+scale = Vector2(1.2, 1.23529)
+color = Color(1, 0, 0.25098, 1)
+polygon = PackedVector2Array(0, -8, -10, 9, 10, 9)
+
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 scale = Vector2(-0.953452, 0.857873)
 polygon = PackedVector2Array(0, -11.6567, 12.5858, 12.8224, -12.5858, 12.8224)
@@ -21,11 +26,8 @@ disabled = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" groups=["enemigo"]]
 scale = Vector2(-0.953452, 0.857873)
-polygon = PackedVector2Array(0, -9.32539, 10.4882, 10.4911, -10.4882, 10.4911)
+polygon = PackedVector2Array(0, -11.6567, 12.5858, 12.8224, -12.5858, 12.8224)
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-scale = Vector2(1.2, 1.23529)
-color = Color(1, 0, 0.25098, 1)
-polygon = PackedVector2Array(0, -8, -10, 9, 10, 9)
+[node name="PuntoVisual" type="Node2D" parent="."]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
