@@ -1,18 +1,18 @@
-[gd_scene format=3 uid="uid://3bl4k0y5471e"]
+[gd_scene load_steps=3 format=3 uid="uid://3bl4k0y5471e"]
 
-[ext_resource type="Script" uid="uid://cmb05itqfmw28" path="res://menu.gd" id="1_ouk20"]
-[ext_resource type="Texture2D" uid="uid://c8bm8a4ftk5fg" path="res://Imagenes/Gemini_Generated_Image_n34f5ln34f5ln34f.png" id="2_mae5d"]
+[ext_resource type="Script" uid="uid://cmb05itqfmw28" path="res://Scripts/menu/menu.gd" id="1_p25xy"]
+[ext_resource type="Texture2D" uid="uid://c8bm8a4ftk5fg" path="res://Imagenes/Gemini_Generated_Image_n34f5ln34f5ln34f.png" id="2_17m5t"]
 
-[node name="menu" type="Control" unique_id=1570685687]
+[node name="menu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ouk20")
+script = ExtResource("1_p25xy")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1900778698]
+[node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1611478432]
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,9 +29,9 @@ offset_left = -257.5
 offset_right = 257.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_mae5d")
+texture = ExtResource("2_17m5t")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1320452063]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -46,17 +46,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
 
-[node name="jugar" type="Button" parent="VBoxContainer" unique_id=627760598]
+[node name="jugar" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Jugar"
 
-[node name="opciones" type="Button" parent="VBoxContainer" unique_id=2085885645]
+[node name="opciones" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Opciones"
 
-[node name="salir" type="Button" parent="VBoxContainer" unique_id=1491667489]
+[node name="salir" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Salir"

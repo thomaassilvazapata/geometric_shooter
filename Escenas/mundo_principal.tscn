@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://s47eco7ygwua"]
 
 [ext_resource type="PackedScene" uid="uid://d24ahcmgrukiw" path="res://Escenas/jugador.tscn" id="1_65efl"]
-[ext_resource type="Script" uid="uid://b8wej323aa7q1" path="res://coordernadas.gd" id="1_a1ae6"]
+[ext_resource type="Script" uid="uid://b8wej323aa7q1" path="res://Scripts/coordernadas.gd" id="1_a1ae6"]
 [ext_resource type="Script" uid="uid://drdyb5ibi654p" path="res://Scripts/centro.gd" id="2_gx3jx"]
 [ext_resource type="Script" uid="uid://hn18mywg3htx" path="res://Scripts/spawn_enemigo.gd" id="2_kbswl"]
 

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bep805rnjmu2b"]
+[gd_scene load_steps=0 format=3 uid="uid://bep805rnjmu2b"]
 
 [ext_resource type="Script" uid="uid://desqkk73gxowu" path="res://opciones.gd" id="1_wvblx"]
 [ext_resource type="Texture2D" uid="uid://c8bm8a4ftk5fg" path="res://Imagenes/Gemini_Generated_Image_n34f5ln34f5ln34f.png" id="2_7bdti"]
