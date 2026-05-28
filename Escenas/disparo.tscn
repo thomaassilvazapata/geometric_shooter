@@ -1,12 +1,9 @@
-[gd_scene format=3 uid="uid://bjkwatkeoisvu"]
-
-[ext_resource type="Script" uid="uid://dktc0qwcyvf6c" path="res://disparo.gd" id="1_irqbl"]
+[gd_scene format=3 uid="uid://dvk2dkly2teqh"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_g4jjy"]
 b = Vector2(100, 0)
 
 [node name="disparo" type="Area2D" unique_id=718754797]
-script = ExtResource("1_irqbl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1884758607]
 shape = SubResource("SegmentShape2D_g4jjy")

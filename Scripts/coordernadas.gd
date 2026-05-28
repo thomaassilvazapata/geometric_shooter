@@ -4,8 +4,8 @@ extends Node2D
 @export var axis_color_x: Color = Color(1, 0, 0, 0.8)   # Red X axis
 @export var axis_color_y: Color = Color(0, 1, 0, 0.8)   # Green Y axis
 @export var cell_size: int = 100
-@export var line_width: float = 0.5
-@export var axis_width: float = 0.7
+@export var line_width: float = 0.7
+@export var axis_width: float = 1.5
 
 func _process(_delta: float) -> void:
 	queue_redraw()  # Redraw every frame so grid follows camera

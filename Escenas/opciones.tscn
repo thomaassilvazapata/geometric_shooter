@@ -1,9 +1,18 @@
-[gd_scene load_steps=0 format=3 uid="uid://bep805rnjmu2b"]
+[gd_scene format=3 uid="uid://bep805rnjmu2b"]
 
-[ext_resource type="Script" uid="uid://desqkk73gxowu" path="res://opciones.gd" id="1_wvblx"]
+[ext_resource type="Script" uid="uid://desqkk73gxowu" path="res://Scripts/menu/opciones.gd" id="1_wvblx"]
 [ext_resource type="Texture2D" uid="uid://c8bm8a4ftk5fg" path="res://Imagenes/Gemini_Generated_Image_n34f5ln34f5ln34f.png" id="2_7bdti"]
 
-[node name="opciones" type="Control" unique_id=1570685687]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56tvd"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.6080412, 0.6722417, 0.6000219, 1)
+border_width_top = 50
+border_color = Color(0.59000057, 0.8238249, 0.6155507, 1)
+
+[node name="opciones" type="Control" unique_id=1798520315]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_wvblx")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1900778698]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1687977700]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +29,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1611478432]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1854720497]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,79 +40,40 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_7bdti")
 
-[node name="botonesopciones" type="VBoxContainer" parent="." unique_id=1320452063]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -145.5
-offset_top = -130.5
-offset_right = 145.5
-offset_bottom = 130.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 15
-
-[node name="volumen" type="Button" parent="botonesopciones" unique_id=627760598]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Volumen"
-
-[node name="reglas" type="Button" parent="botonesopciones" unique_id=2085885645]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Reglas"
-
-[node name="atras" type="Button" parent="botonesopciones" unique_id=1491667489]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Atras"
-
-[node name="volumen" type="Panel" parent="." unique_id=555961961]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -207.5
-offset_right = 220.0
-offset_bottom = 207.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="atras" type="Button" parent="volumen" unique_id=83504967]
+[node name="botonesopciones" type="VBoxContainer" parent="." unique_id=1532516406]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -55.0
-offset_top = -63.0
-offset_right = 55.0
+offset_left = -265.0
+offset_top = -478.0
+offset_right = 267.0
+offset_bottom = -42.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/separation = 15
+
+[node name="reglas" type="Label" parent="botonesopciones" unique_id=246470032]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_56tvd")
+text = "REGLAS DEL JUEGO:
+
+• Defiende el centro de la circunferencia
+• Dispara con CLICK IZQUIERDO
+• Para eliminar un TRIÁNGULO: dispara alineando
+  tu posición con una de sus bisectrices
+• Para eliminar un CUADRILÁTERO: dispara alineando
+  con su diagonal
+• Intercepta enemigos perpendicularmente para destruirlos
+• Si un enemigo llega al centro, drena vida"
+
+[node name="atras" type="Button" parent="botonesopciones" unique_id=728241121]
+layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Atras"
 
-[node name="Label" type="Label" parent="volumen" unique_id=70647705]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 83.5
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 35
-text = "Volumen"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[connection signal="pressed" from="botonesopciones/volumen" to="." method="_on_jugar_pressed"]
-[connection signal="pressed" from="botonesopciones/volumen" to="." method="_on_volumen_pressed"]
-[connection signal="pressed" from="botonesopciones/reglas" to="." method="_on_opciones_pressed"]
-[connection signal="pressed" from="botonesopciones/atras" to="." method="_on_salir_pressed"]
 [connection signal="pressed" from="botonesopciones/atras" to="." method="_on_atras_opciones_pressed"]
-[connection signal="pressed" from="volumen/atras" to="." method="_on_atras_pressed"]
+[connection signal="pressed" from="botonesopciones/atras" to="." method="_on_salir_pressed"]

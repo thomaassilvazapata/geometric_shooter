@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://s47eco7ygwua"]
+[gd_scene format=3 uid="uid://s47eco7ygwua"]
 
 [ext_resource type="PackedScene" uid="uid://d24ahcmgrukiw" path="res://Escenas/jugador.tscn" id="1_65efl"]
 [ext_resource type="Script" uid="uid://b8wej323aa7q1" path="res://Scripts/coordernadas.gd" id="1_a1ae6"]
@@ -7,18 +7,26 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_itk02"]
 
-[node name="Mundo" type="Node2D"]
+[sub_resource type="Environment" id="Environment_gx3jx"]
+background_mode = 3
+glow_enabled = true
+glow_mix = 0.5
+glow_bloom = 1.0
+glow_blend_mode = 0
+glow_hdr_threshold = 0.8
 
-[node name="Centro" type="Node2D" parent="."]
+[node name="Mundo" type="Node2D" unique_id=438838128]
+
+[node name="Centro" type="Node2D" parent="." unique_id=1675401590]
 script = ExtResource("1_a1ae6")
 grid_color = Color(0.501961, 0.501961, 0.501961, 0.196078)
 axis_color_x = Color(1, 0, 0, 0.392157)
 axis_color_y = Color(0, 1, 0, 0.392157)
 
-[node name="AreaVulnerable" type="Area2D" parent="Centro" groups=["Jugador", "centro"]]
+[node name="AreaVulnerable" type="Area2D" parent="Centro" unique_id=755253571 groups=["Jugador", "centro"]]
 script = ExtResource("2_gx3jx")
 
-[node name="ProgressBar" type="ProgressBar" parent="Centro/AreaVulnerable"]
+[node name="ProgressBar" type="ProgressBar" parent="Centro/AreaVulnerable" unique_id=2024440554]
 modulate = Color(0, 1, 0, 1)
 z_index = 1
 anchors_preset = 5
@@ -31,14 +39,18 @@ offset_bottom = 12.0
 grow_horizontal = 2
 value = 100.0
 rounded = true
+metadata/_edit_use_anchors_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Centro/AreaVulnerable"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Centro/AreaVulnerable" unique_id=392574661]
 scale = Vector2(8, 8)
 shape = SubResource("CircleShape2D_itk02")
 debug_color = Color(1.15514e-06, 0.643478, 0.299268, 0.42)
 
-[node name="Jugador" parent="." instance=ExtResource("1_65efl")]
+[node name="Jugador" parent="." unique_id=272664227 instance=ExtResource("1_65efl")]
 scale = Vector2(1.00154, 1)
 
-[node name="Spawn1" type="Node2D" parent="."]
+[node name="Spawn1" type="Node2D" parent="." unique_id=1392628583]
 script = ExtResource("2_kbswl")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1269459499]
+environment = SubResource("Environment_gx3jx")

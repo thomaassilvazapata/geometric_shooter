@@ -16,12 +16,20 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="geometric_shooter"
 run/main_scene="uid://3bl4k0y5471e"
-config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/features=PackedStringArray("4.6", "Forward Plus")
 
 [autoload]
 
-Nucleo="*res://Scripts/nucleo.gd"
+Musica="*uid://bvjewrrxq68o7"
+
+[file_customization]
+
+folder_colors={
+"res://Escenas/": "green",
+"res://Imagenes/": "blue",
+"res://Scripts/": "red",
+"res://audio/": "yellow"
+}
 
 [global_group]
 

@@ -17,6 +17,8 @@ var ya_eliminado: bool = false
 @export var punto_tamano: float = 1.5
 @export var brillo_velocidad: float = 2.0
 
+@export var explosion_particles: PackedScene
+
 var punto_critico: Vector2
 var polygon_node: Polygon2D
 var punto_visual: Node2D
@@ -26,9 +28,6 @@ func _ready():
 	collision_layer = 1
 	collision_mask = 1
 	add_to_group("enemigo")
-	
-	# Nombre único para debug
-	name = "Triangulo_" + str(Time.get_ticks_usec())
 	
 	polygon_node = get_node("Polygon2D")
 	calcular_incentro()
@@ -43,11 +42,26 @@ func _physics_process(_delta):
 	velocity = direccion_real * speed
 	move_and_slide()
 	
+	# VERIFICAR SI LLEGÓ AL CENTRO
+	if global_position.distance_to(Vector2.ZERO) < 10:  #píxeles de tolerancia
+		llegar_al_centro()
+		return
+	
 	direccion_suavizada = direccion_suavizada.lerp(direccion_real, velocidad_suavizado)
 	actualizar_flecha()
 	
 	if punto_visual:
 		punto_visual.position = punto_critico
+
+func llegar_al_centro():
+	if ya_eliminado:
+		return
+	ya_eliminado = true
+	
+	if nucleo and nucleo.has_method("recibir_dano_enemigo"):
+		nucleo.recibir_dano_enemigo(3, "Triangulus")
+	
+	queue_free()
 
 # FLECHA VISUAL
 func crear_flecha():
@@ -152,7 +166,31 @@ func exito_simetria():
 	if ya_eliminado:
 		return
 	ya_eliminado = true
+	
+	crear_explosion()
+	
 	queue_free()
+
+func crear_explosion():
+	var particulas = CPUParticles2D.new()
+	particulas.global_position = global_position
+	particulas.amount = 30
+	particulas.lifetime = 0.5
+	particulas.one_shot = true
+	particulas.emitting = true
+	particulas.gravity = Vector2.ZERO
+	particulas.direction = Vector2(0, -1)
+	particulas.spread = 360
+	particulas.initial_velocity_min = 80
+	particulas.initial_velocity_max = 150
+	particulas.scale_amount_min = 2.0
+	particulas.scale_amount_max = 5.0
+	particulas.color = Color(1.0, 0.0, 0.39, 1.0)
+	
+	get_tree().root.add_child(particulas)
+	
+	await get_tree().create_timer(particulas.lifetime).timeout
+	particulas.queue_free()
 
 # COLISIÓN CON JUGADOR
 func _on_body_entered(body):

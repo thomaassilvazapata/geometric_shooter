@@ -1,13 +1,13 @@
 extends CharacterBody2D
 
-# ============ MOVIMIENTO ============
+# MOVIMIENTO
 var velocidad: float = 200
 var posicion_anterior: Vector2
 var direccion_actual: Vector2 = Vector2.RIGHT
 var direccion_suavizada: Vector2 = Vector2.RIGHT
 var velocidad_suavizado: float = 0.2
 
-# ============ LÍNEA DE DISPARO ============
+# LÍNEA DE DISPARO
 @export var line_duration: float = 0.5
 @export var line_color: Color = Color.WHITE
 @export var line_width: float = 1.0
@@ -18,23 +18,20 @@ var line_timer: float = 0.0
 var is_drawing_line: bool = false
 var line_end_point: Vector2
 
-# ============ TEMBLOR DE PANTALLA ============
-@export var shake_intensity: float = 8.0
-@export var shake_duration: float = 0.15
+# TEMBLOR DE PANTALLA
+@export var shake_intensity: float = 10.0
+@export var shake_duration: float = 0.25
 
 var shake_timer: float = 0.0
 var camera: Camera2D
 
-# ============ BISECTRIZ VISUAL ============
+# BISECTRIZ VISUAL
 var bisectriz_visible: bool = false
-var bisectriz_vertice: Vector2 = Vector2.ZERO
-var bisectriz_lado1: Vector2 = Vector2.ZERO
-var bisectriz_lado2: Vector2 = Vector2.ZERO
-var bisectriz_direccion: Vector2 = Vector2.ZERO
+var bisectriz_nodo: Node2D = null
 var bisectriz_timer: float = 0.0
 var bisectriz_duration: float = 0.5
 
-# ============ REFERENCIAS ============
+# REFERENCIAS
 @onready var nucleo = get_node("/root/Mundo/Centro/AreaVulnerable")
 var flecha_direccion: Line2D
 
@@ -69,6 +66,19 @@ func _physics_process(_delta: float) -> void:
 	
 	actualizar_flecha()
 	posicion_anterior = global_position
+	
+func mostrar_notificacion(texto: String, color: Color, posicion: Vector2):
+	var label = Label.new()
+	label.text = texto
+	label.modulate = color
+	label.add_theme_font_size_override("font_size", 16)
+	label.global_position = posicion
+	get_tree().root.add_child(label)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position", label.position - Vector2(0, 50), 1.0)
+	tween.parallel().tween_property(label, "modulate:a", 0, 1.0)
+	tween.tween_callback(label.queue_free)
 
 func crear_flecha():
 	flecha_direccion = Line2D.new()
@@ -129,11 +139,12 @@ func _process(delta):
 		if line_timer <= 0:
 			hide_line()
 	
-	if bisectriz_visible:
+	if bisectriz_visible and bisectriz_nodo:
 		bisectriz_timer -= delta
 		if bisectriz_timer <= 0:
 			bisectriz_visible = false
-			queue_redraw()
+			bisectriz_nodo.queue_free()
+			bisectriz_nodo = null
 	
 	if shake_timer > 0:
 		shake_timer -= delta
@@ -172,7 +183,13 @@ func calculate_line_end(start: Vector2, direction: Vector2) -> Vector2:
 		if t > 0 and t < min_t:
 			min_t = t
 	
-	return start + direction * (min_t if min_t != INF else 2000)
+	var resultado: float
+	if min_t != INF:
+		resultado = min_t
+	else:
+		resultado = 2000
+	
+	return start + direction * resultado
 
 func create_line_node():
 	line_node = Line2D.new()
@@ -194,14 +211,13 @@ func hide_line():
 func start_shake():
 	shake_timer = shake_duration
 
-# ============ VALIDACIÓN DE COLINEALIDAD ============
+# VALIDACIÓN DE COLINEALIDAD
 func verificar_enemigos_colineales(linea_origen: Vector2, linea_direccion: Vector2):
 	var enemigos = get_tree().get_nodes_in_group("enemigo")
 	var enemigo_a_eliminar = null
-	var vertice_guardado = Vector2.ZERO
-	var punto_critico_guardado = Vector2.ZERO
-	var lado1_guardado = Vector2.ZERO
-	var lado2_guardado = Vector2.ZERO
+	var vertice_impacto = Vector2.ZERO
+	var lado1_impacto = Vector2.ZERO
+	var lado2_impacto = Vector2.ZERO
 	
 	for enemigo in enemigos:
 		if not enemigo.has_method("obtener_vertices") or not enemigo.has_method("obtener_punto_critico"):
@@ -211,75 +227,101 @@ func verificar_enemigos_colineales(linea_origen: Vector2, linea_direccion: Vecto
 			continue
 		
 		var vertices = enemigo.obtener_vertices()
-		var vertices_locales = enemigo.obtener_vertices_locales()  # ← NECESITAS ESTE MÉTODO
+		var vertices_locales = enemigo.obtener_vertices_locales()
 		var punto_critico = enemigo.obtener_punto_critico()
+		var es_triangulo = vertices.size() == 3
 		
 		for i in range(vertices.size()):
 			var vertice = vertices[i]
-			if son_colineales(linea_origen, vertice, punto_critico):
-				print("✓ Disparo alineado: ", enemigo.name)
-				
-				# === CÓDIGO NUEVO PARA LA BISECTRIZ ===
-				# Obtener los dos lados del triángulo desde ese vértice
-				var idx = i
-				var lado1 = enemigo.to_global(vertices_locales[(idx + 1) % vertices_locales.size()])
-				var lado2 = enemigo.to_global(vertices_locales[(idx - 1 + vertices_locales.size()) % vertices_locales.size()])
-				var direccion_bisectriz = (punto_critico - vertice).normalized()
-				
-				mostrar_bisectriz(vertice, lado1, lado2, direccion_bisectriz)
-				# ====================================
-				
-				enemigo_a_eliminar = enemigo
-				vertice_guardado = vertice
-				punto_critico_guardado = punto_critico
-				break
+			
+			# Verificar colinealidad entre jugador, vértice y punto crítico
+			if not son_colineales(linea_origen, vertice, punto_critico):
+				continue
+			
+			# Verificar que apunta hacia el vértice
+			var direccion_al_vertice = (vertice - linea_origen).normalized()
+			var diferencia = abs(direccion_al_vertice.angle_to(linea_direccion))
+			
+			if diferencia > tolerancia_alineacion:
+				continue  # No apuntaba al vértice
+			
+			if es_triangulo:
+				mostrar_notificacion("¡BISECTRIZ!", Color(0, 1, 0), vertice)
+			else:
+				mostrar_notificacion("¡CENTRO SIMETRÍA!", Color(0, 0.5, 1), vertice)
+			
+			var idx = i
+			var lado1 = enemigo.to_global(vertices_locales[(idx + 1) % vertices_locales.size()])
+			var lado2 = enemigo.to_global(vertices_locales[(idx - 1 + vertices_locales.size()) % vertices_locales.size()])
+			
+			vertice_impacto = vertice
+			lado1_impacto = lado1
+			lado2_impacto = lado2
+			enemigo_a_eliminar = enemigo
+			break
 		
 		if enemigo_a_eliminar:
 			break
 	
 	if enemigo_a_eliminar:
+		mostrar_bisectriz(vertice_impacto, lado1_impacto, lado2_impacto)
 		enemigo_a_eliminar.exito_simetria()
 
-func _draw():
-	if bisectriz_visible and bisectriz_vertice != Vector2.ZERO:
-		var vertice_local = to_local(bisectriz_vertice)
-		var lado1_local = to_local(bisectriz_lado1)
-		var lado2_local = to_local(bisectriz_lado2)
-		
-		# Calcular dirección de la bisectriz (ángulo medio entre lado1 y lado2)
-		var dir1 = (lado1_local - vertice_local).normalized()
-		var dir2 = (lado2_local - vertice_local).normalized()
-		var angulo_medio = (dir1.angle() + dir2.angle()) / 2
-		var direccion_bisectriz = Vector2(cos(angulo_medio), sin(angulo_medio))
-		var bisectriz_local = vertice_local + direccion_bisectriz * 150
-		
-		# Lado 1 (verde)
-		draw_line(vertice_local, lado1_local, Color(0, 0.8, 0), 3)
-		
-		# Lado 2 (rojo)
-		draw_line(vertice_local, lado2_local, Color(0.8, 0, 0), 3)
-		
-		# Bisectriz (amarillo punteado)
-		var puntos_bisectriz = generar_linea_punteada(vertice_local, bisectriz_local, 10)
-		for i in range(puntos_bisectriz.size() - 1):
-			draw_line(puntos_bisectriz[i], puntos_bisectriz[i + 1], Color(1, 1, 0), 2)
-		
-		# Arco del ángulo (gris)
-		var radio_arco = 45
-		var angulo_inicio = dir1.angle()
-		var angulo_fin = dir2.angle()
-		
-		if angulo_fin < angulo_inicio:
-			angulo_fin += PI * 2
-		
-		draw_arc(vertice_local, radio_arco, angulo_inicio, angulo_fin, 24, Color(0.6, 0.6, 0.6), 2)
-		
-		# Círculo en el vértice (blanco)
-		draw_circle(vertice_local, 5, Color.WHITE)
+func mostrar_bisectriz(vertice: Vector2, lado1: Vector2, lado2: Vector2):
+	if bisectriz_nodo:
+		bisectriz_nodo.queue_free()
+		bisectriz_nodo = null
+	
+	bisectriz_nodo = Node2D.new()
+	bisectriz_nodo.global_position = vertice
+	get_tree().root.add_child(bisectriz_nodo)
+	
+	# Guardar datos para dibujar en _draw del nodo
+	bisectriz_nodo.set_meta("lado1", bisectriz_nodo.to_local(lado1))
+	bisectriz_nodo.set_meta("lado2", bisectriz_nodo.to_local(lado2))
+	
+	# Conectar la señal draw
+	bisectriz_nodo.draw.connect(_draw_bisectriz.bind(bisectriz_nodo))
+	bisectriz_nodo.queue_redraw()
+	
+	bisectriz_visible = true
+	bisectriz_timer = bisectriz_duration
+
+func _draw_bisectriz(nodo: Node2D):
+	if not is_instance_valid(nodo):
+		return
+	
+	var lado1_local = nodo.get_meta("lado1", Vector2.ZERO)
+	var lado2_local = nodo.get_meta("lado2", Vector2.ZERO)
+	
+	if lado1_local == Vector2.ZERO or lado2_local == Vector2.ZERO:
+		return
+	
+	var dir1 = lado1_local.normalized()
+	var dir2 = lado2_local.normalized()
+	var angulo_medio = (dir1.angle() + dir2.angle()) / 2
+	var direccion_bisectriz = Vector2(cos(angulo_medio), sin(angulo_medio))
+	var bisectriz_local = direccion_bisectriz * 150
+	
+	var radio_arco = 45
+	var angulo_inicio = dir1.angle()
+	var angulo_fin = dir2.angle()
+	if angulo_fin < angulo_inicio:
+		angulo_fin += PI * 2
+	
+	nodo.draw_line(Vector2.ZERO, lado1_local, Color(0, 0.8, 0), 3)
+	nodo.draw_line(Vector2.ZERO, lado2_local, Color(0.8, 0, 0), 3)
+	
+	var puntos = generar_linea_punteada(Vector2.ZERO, bisectriz_local, 10)
+	for i in range(puntos.size() - 1):
+		nodo.draw_line(puntos[i], puntos[i + 1], Color(1, 1, 0), 2)
+	
+	nodo.draw_arc(Vector2.ZERO, radio_arco, angulo_inicio, angulo_fin, 24, Color(0.6, 0.6, 0.6), 2)
+	nodo.draw_circle(Vector2.ZERO, 5, Color.WHITE)
 
 func generar_linea_punteada(inicio: Vector2, fin: Vector2, longitud_tramo: float) -> Array[Vector2]:
 	var puntos: Array[Vector2] = []
-	var direccion = (fin - inicio).normalized()
+	var _direccion = (fin - inicio).normalized()
 	var distancia_total = inicio.distance_to(fin)
 	var tramos = max(2, int(distancia_total / longitud_tramo))
 	
@@ -290,30 +332,16 @@ func generar_linea_punteada(inicio: Vector2, fin: Vector2, longitud_tramo: float
 	
 	return puntos
 
-# ============ MOSTRAR BISECTRIZ ============
-func mostrar_bisectriz(vertice: Vector2, lado1: Vector2, lado2: Vector2, direccion: Vector2):
-	bisectriz_vertice = vertice
-	bisectriz_lado1 = lado1
-	bisectriz_lado2 = lado2
-	bisectriz_direccion = direccion
-	bisectriz_visible = true
-	bisectriz_timer = bisectriz_duration
-	queue_redraw()
-
 func son_colineales(punto_base: Vector2, punto_a: Vector2, punto_b: Vector2) -> bool:
 	var vector_a = (punto_a - punto_base).normalized()
 	var vector_b = (punto_b - punto_base).normalized()
 	
 	var diferencia = abs(vector_a.angle_to(vector_b))
 	var minima = min(diferencia, abs(PI - diferencia))
-	var diff_grados = rad_to_deg(minima)
-	var umbral_grados = rad_to_deg(tolerancia_alineacion)
-	
-	print("  → Ángulo: ", round(diff_grados * 100) / 100, "° / Umbral: ", round(umbral_grados * 100) / 100, "°")
 	
 	return minima <= tolerancia_alineacion
 
-# ============ COLISIÓN ============
+# COLISIÓN
 func _on_body_entered(body):
 	if body.is_in_group("enemigo") and nucleo:
 		nucleo._on_jugador_colision_con_enemigo(
